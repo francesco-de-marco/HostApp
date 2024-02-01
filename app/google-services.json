@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "268562134508",
+    "project_id": "hostapp-7cad4",
+    "storage_bucket": "hostapp-7cad4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268562134508:android:2aa7b44d19c7f35d3e3cc9",
+        "android_client_info": {
+          "package_name": "com.example.hostapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS2Y6Dt2B-1YcWM6ueAsfcA5NlfJqLg-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
