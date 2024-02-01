@@ -11,14 +11,14 @@ class HelperClass {
     var password: String = ""
         private set
 
-    var gestore: Boolean = false
+    var tipologia: String = ""
         private set
 
     constructor()
-    constructor(user: String, email: String, password: String, gestore: Boolean) {
+    constructor(user: String, email: String, password: String, tipologia: String) {
         this.email = email
         this.user = user
         this.password = password
-        this.gestore = gestore
+        this.tipologia = tipologia
     }
 }

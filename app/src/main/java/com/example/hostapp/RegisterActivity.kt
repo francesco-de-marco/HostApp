@@ -25,37 +25,20 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var btnRegister: Button
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
-    private lateinit var radioTipo: RadioGroup
-    private lateinit var radioSport: RadioButton
-    private lateinit var radioGest: RadioButton
-    private var tipo: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
         inputEmail = findViewById(R.id.inputEmail)
-        inputUser = findViewById(R.id.loginUser)
-        inputPassword = findViewById(R.id.loginPassword)
+        inputUser = findViewById(R.id.inputUser)
+        inputPassword = findViewById(R.id.inputPassword)
         inputConfirmPass = findViewById(R.id.inputConfirmPass)
-        radioTipo = findViewById(R.id.radioTipo)
-        radioSport = findViewById(R.id.radioSport)
-        radioGest = findViewById(R.id.radioGest)
         haGiaAccount = findViewById(R.id.haGiaAccount)
         btnRegister = findViewById(R.id.btnRegister)
 
-        radioTipo.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.radioSport -> {
-                    tipo=false
-                    Toast.makeText(this@RegisterActivity, "Visualizza le strutture nelle tue vicinanze", Toast.LENGTH_SHORT).show()
-                }
-                R.id.radioGest -> {
-                    tipo=true
-                    Toast.makeText(this@RegisterActivity, "Registra la tua Attività! Fatti Raggiungere!!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        var tipo = intent.getStringExtra(Intent.EXTRA_TEXT).toString()
 
         val accountEsistente = findViewById<TextView>(R.id.haGiaAccount)
         accountEsistente.setOnClickListener{
@@ -63,12 +46,16 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        fun registrazione(user: String,email: String, password: String){
+        fun registrazione(user: String,email: String, password: String, tipo: String){
             val helperClass = HelperClass(user, email, password,tipo)
             reference.child(user).setValue(helperClass)
             Toast.makeText(this@RegisterActivity, "Ti sei registrato con successo", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent: Intent
+            if(tipo=="Sportivo")
+                intent = Intent(this, LoginActivity::class.java)
+            else intent = Intent(this, GestoreActivity::class.java)
             startActivity(intent)
+
         }
 
         fun approvato(){
@@ -81,10 +68,19 @@ class RegisterActivity : AppCompatActivity() {
             var conferma= inputConfirmPass.text.toString()
             if (!conferma.equals(password)) {
                 inputConfirmPass.setText("")
-                conferma= inputConfirmPass.text.toString()
                 inputConfirmPass.error = "Password Non Coincide"
                 inputConfirmPass.requestFocus()
-            }else registrazione(user,email,password)
+            }else if(user=="") {
+                inputUser.error = "Devi compilare tutti i campi"
+                inputUser.requestFocus()
+            }else if (email=="") {
+                inputEmail.error = "Devi compilare tutti i campi"
+                inputEmail.requestFocus()
+            }
+            else if (password=="") {
+                inputPassword.error = "Devi compilare tutti i campi"
+                inputPassword.requestFocus()
+            } else registrazione(user,email,password, tipo)
         }
 
         btnRegister.setOnClickListener { view ->

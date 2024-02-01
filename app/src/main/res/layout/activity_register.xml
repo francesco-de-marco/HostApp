@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.100000024" />
 
     <EditText
-        android:id="@+id/loginUser"
+        android:id="@+id/inputUser"
         android:layout_width="394dp"
         android:layout_height="53dp"
         android:layout_marginStart="16dp"
@@ -43,19 +43,19 @@
         android:ems="10"
         android:hint="E-mail"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/loginPassword"
-        app:layout_constraintEnd_toEndOf="@+id/loginUser"
-        app:layout_constraintStart_toStartOf="@+id/loginUser"
-        app:layout_constraintTop_toBottomOf="@+id/loginUser" />
+        app:layout_constraintBottom_toTopOf="@+id/inputPassword"
+        app:layout_constraintEnd_toEndOf="@+id/inputUser"
+        app:layout_constraintStart_toStartOf="@+id/inputUser"
+        app:layout_constraintTop_toBottomOf="@+id/inputUser" />
 
     <EditText
-        android:id="@+id/loginPassword"
+        android:id="@+id/inputPassword"
         android:layout_width="387dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Password"
-        android:inputType="text"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/inputConfirmPass"
         app:layout_constraintEnd_toEndOf="@+id/inputEmail"
         app:layout_constraintStart_toStartOf="@+id/inputEmail"
@@ -68,10 +68,10 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Conferma Password"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="@+id/loginPassword"
-        app:layout_constraintStart_toStartOf="@+id/loginPassword"
-        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/inputPassword"
+        app:layout_constraintStart_toStartOf="@+id/inputPassword"
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
 
     <Button
         android:id="@+id/btnRegister"
@@ -96,33 +96,5 @@
         app:layout_constraintStart_toStartOf="@+id/btnRegister"
         app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 
-    <RadioGroup
-        android:id="@+id/radioTipo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputConfirmPass">
-
-        <RadioButton
-            android:id="@+id/radioSport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Sportivo"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/radioGest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Gestore"
-            android:textSize="20sp" />
-
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

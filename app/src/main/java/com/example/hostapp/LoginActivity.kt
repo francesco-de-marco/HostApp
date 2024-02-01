@@ -3,7 +3,6 @@ package com.example.hostapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -11,7 +10,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.snapshots
 
 class LoginActivity : AppCompatActivity() {
 
@@ -31,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
 
         val textRegister = findViewById<TextView>(R.id.registerText)
         textRegister.setOnClickListener{
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
         }
 
