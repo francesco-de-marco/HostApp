@@ -1,12 +1,12 @@
 package com.example.hostapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -56,19 +56,23 @@ class RegisterActivity : AppCompatActivity() {
 
         }
 
+        fun verifica(user: String,email: String, password: String) {
+
+
+        }
+
         fun approvato(){
+            val regUser = Regex("^[a-zA-Z0-9_]{3,}")
+            val regEmail = Regex("^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*")
+            val regPass = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-zA-Z0-9!@#\$%^&*]{7,}\$")
+
             database = FirebaseDatabase.getInstance()
             reference = database.getReference("users")
             val user = inputUser.text.toString()
             val email = inputEmail.text.toString()
             val password = inputPassword.text.toString()
-
             var conferma= inputConfirmPass.text.toString()
-            if (!conferma.equals(password)) {
-                inputConfirmPass.setText("")
-                inputConfirmPass.error = "Password Non Coincide"
-                inputConfirmPass.requestFocus()
-            }else if(user=="") {
+            if (user=="") {
                 inputUser.error = "Devi compilare tutti i campi"
                 inputUser.requestFocus()
             }else if (email=="") {
@@ -78,7 +82,21 @@ class RegisterActivity : AppCompatActivity() {
             else if (password=="") {
                 inputPassword.error = "Devi compilare tutti i campi"
                 inputPassword.requestFocus()
-            } else registrazione(user,email,password, tipo)
+            }else if(!regUser.matches(user)){
+                inputUser.error = "User di almeno 3 lettere"
+                inputUser.requestFocus()
+            }else if(!regEmail.matches(email)){
+                inputEmail.error = "Email non valida"
+                inputEmail.requestFocus()
+            }else if(regPass.matches(password)){
+                inputPassword.error = "Password poco efficiente"
+                inputPassword.requestFocus()
+            }else if (!conferma.equals(password)){
+                 inputConfirmPass.setText("")
+                 inputConfirmPass.error = "Password Non Coincide"
+                 inputConfirmPass.requestFocus()
+             }
+            else registrazione(user,email,password, tipo)
         }
 
         btnRegister.setOnClickListener { view ->

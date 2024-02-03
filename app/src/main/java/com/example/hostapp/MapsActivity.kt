@@ -1,8 +1,8 @@
+
 package com.example.hostapp
 
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -18,7 +18,6 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener
 import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-
 
 internal class MapsActivity : AppCompatActivity(),
     OnMyLocationButtonClickListener,
@@ -52,7 +51,7 @@ internal class MapsActivity : AppCompatActivity(),
             )
             return
         }
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
         if (!isGpsEnabled) {
@@ -82,41 +81,40 @@ internal class MapsActivity : AppCompatActivity(),
         ) {
             return
         }
+
         map.isMyLocationEnabled = true
         map.setOnMyLocationButtonClickListener(this)
         map.setOnMyLocationClickListener(this)
     }
 
     override fun onMyLocationClick(location: Location) {
-        Toast.makeText(this, "Current location:\n$location", Toast.LENGTH_LONG)
-            .show()
-    }
+            Toast.makeText(this, "Current location:\n$location", Toast.LENGTH_LONG)
+                .show()
+        }
 
-    override fun onMyLocationButtonClick(): Boolean {
-        Toast.makeText(this, "Sei qui", Toast.LENGTH_SHORT)
-            .show()
-        return false
-    }
+        override fun onMyLocationButtonClick(): Boolean {
+            Toast.makeText(this, "Sei qui", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+        ) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == FINE_PERMISSION_CODE)
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation()
-            } else {
-                Toast.makeText(
-                    this,
-                    "Permessi di localizzazione negati, per favore accetta",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-    }
-
-
-
+            if (requestCode == FINE_PERMISSION_CODE)
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLastLocation()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Permessi di localizzazione negati, per favore accetta",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
 }
+      

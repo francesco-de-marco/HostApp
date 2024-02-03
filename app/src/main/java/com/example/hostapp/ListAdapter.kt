@@ -24,3 +24,6 @@ class ListAdapter(context: Context, dataArrayList: ArrayList<ListData?>?) :
         return view!!
     }
 }
+
+class ListData(
+    var name: String)

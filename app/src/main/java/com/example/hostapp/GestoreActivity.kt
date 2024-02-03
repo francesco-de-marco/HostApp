@@ -1,11 +1,11 @@
 package com.example.hostapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -27,7 +27,10 @@ class GestoreActivity : AppCompatActivity() {
         inputAttivita = findViewById(R.id.inputAttivita)
         inputPhone = findViewById(R.id.inputPhone)
 
+
         fun approvato(){
+            val regTel = Regex("^[0-9]{10}\$")
+
             database = FirebaseDatabase.getInstance()
             reference = database.getReference("location")
             val attivita = inputAttivita.text.toString()
@@ -38,6 +41,9 @@ class GestoreActivity : AppCompatActivity() {
                 inputAttivita.requestFocus()
             }else if (phone=="") {
                 inputPhone.error = "Devi compilare tutti i campi"
+                inputPhone.requestFocus()
+            }else if(!regTel.matches(phone)){
+                inputPhone.error = "Numero di telefono invalido"
                 inputPhone.requestFocus()
             } else {
                 val helperClass2 = HelperClass2(attivita,phone)

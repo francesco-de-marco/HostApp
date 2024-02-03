@@ -1,10 +1,9 @@
 package com.example.hostapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.cardview.widget.CardView
 import android.widget.AdapterView.OnItemClickListener
+import androidx.appcompat.app.AppCompatActivity
 import com.example.hostapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
