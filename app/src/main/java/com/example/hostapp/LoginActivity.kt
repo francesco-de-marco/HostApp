@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
                         val passwordFromDB = snapshot.child(user).child("password").getValue(String::class.java)
                         if (passwordFromDB == userPassword) {
                             loginUser.error = null
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            val intent = Intent(this@LoginActivity, Main2Activity::class.java)
                             startActivity(intent)
                         } else {
                             loginPassword.error = "Credenziali Invalide"
