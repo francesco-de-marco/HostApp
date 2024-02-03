@@ -8,6 +8,8 @@ class HelperClass2 {
     var telefono: String = ""
         private set
 
+
+    //ho sonno e mi sono rotto il cazzo
     constructor()
     constructor(attivita: String, telefono: String) {
         this.attivita = attivita
