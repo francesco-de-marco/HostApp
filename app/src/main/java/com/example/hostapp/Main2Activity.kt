@@ -101,7 +101,7 @@ class Main2Activity : AppCompatActivity() {
             if(hourI>=hourF)
                 Toast.makeText(this@Main2Activity, "["+hourI+"-"+hourF+"] L'intervvallo di tempo è scoretto", Toast.LENGTH_SHORT).show()
             else
-            timeSelect.text = "L'intervallo è: [${inputTimeI.text}-${inputTimeF.text}]"
+                timeSelect.text = "L'intervallo è: [${inputTimeI.text}-${inputTimeF.text}]"
         }
     }
 
