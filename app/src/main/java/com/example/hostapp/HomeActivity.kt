@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -14,6 +15,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var radioSport: RadioButton
     private lateinit var radioGest: RadioButton
     private lateinit var btnAvanti: Button
+    private lateinit var haGiaAccount: TextView
     override fun onCreate(savedInstanceState: Bundle?) {    //differenzia i tipi di registrazione
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -22,6 +24,13 @@ class HomeActivity : AppCompatActivity() {
         radioSport = findViewById(R.id.radioSport)
         radioGest = findViewById(R.id.radioGest)
         btnAvanti = findViewById(R.id.btnAvanti)
+        haGiaAccount = findViewById(R.id.haGiaAccount)
+
+        val accountEsistente = findViewById<TextView>(R.id.haGiaAccount)
+        accountEsistente.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         var tipo = ""
         radioTipo.setOnCheckedChangeListener { group, checkedId ->
