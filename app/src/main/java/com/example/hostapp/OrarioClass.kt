@@ -5,7 +5,6 @@ class OrarioClass {
         private set
     var giorno: String = ""
         private set
-
     var ora: String = ""
         private set
     constructor()

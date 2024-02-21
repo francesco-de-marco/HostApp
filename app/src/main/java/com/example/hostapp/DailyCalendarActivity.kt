@@ -4,23 +4,24 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.hostapp.databinding.ActivityMainBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.Calendar
 
 class DailyCalendarActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var listAdapter: ListAdapter
-    private lateinit var listData: ListData
-    var dataArrayList = ArrayList<ListData?>()
+    private lateinit var listaPren: ListView
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
     private lateinit var calendario: Calendar
@@ -33,35 +34,76 @@ class DailyCalendarActivity : AppCompatActivity() {
     private lateinit var picker: TimePickerDialog
     private var hourI:Int = 0
     private var hourF:Int = 0
+    private lateinit var nome: String
+    fun listaPren(attivita: String,dataPren: String){
+        listaPren = findViewById(R.id.listPre)
+        var nomeList = mutableListOf<String>()
 
+
+        reference = database.getReference("prenotazioni/$attivita/$dataPren")
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (childSnapshot in snapshot.children) {
+                    val attributo1 = childSnapshot.child("nome").getValue(String::class.java)
+                    val attributo2 = childSnapshot.child("ora").getValue(String::class.java)
+                    val resultString = "$attributo1 - ore: $attributo2"
+                    nomeList.add(resultString)
+                }
+
+                if(nomeList.size==0)
+                    nomeList.add("Nessuna Prenotazione al momento")
+
+                val arrayAdapter = ArrayAdapter(this@DailyCalendarActivity, R.layout.lista, R.id.elemento, nomeList)
+                listaPren.adapter = arrayAdapter
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
     fun verificaPrenotazione(attivita: String,dataPren: String,nomeSportivo: String){
 
         val orario="${inputTimeI.text}-${inputTimeF.text}"
-        val chiaveConfronto = orario+" "+dataPren
 
         database = FirebaseDatabase.getInstance()
-        reference = database.getReference("prenotazioni/$attivita")
+        reference = database.getReference("prenotazioni/$attivita/")
 
         reference.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val dataSnapshot = task.result
-                val prenotati = dataSnapshot.children.map { it.getValue(OrarioClass::class.java) }
-
-                val giornoDaControllare = dataPren // Sostituisci con il giorno da controllare
-                val oraDaControllare = orario // Sostituisci con l'ora da controllare
-
-                // Controlla ogni orario
-                for (pren in prenotati) {
-                    if (pren?.giorno == giornoDaControllare && pren?.ora == oraDaControllare) {
-                        inputTimeI.error = "Orario occupato"
-                        inputTimeI.requestFocus()
-                        return@addOnCompleteListener
-                    } else
-                        reference.child(chiaveConfronto).setValue(OrarioClass(nomeSportivo, dataPren, orario))
+                reference = database.getReference("prenotazioni/$attivita/$dataPren")
+                reference.get().addOnCompleteListener { task ->
+                    if( task.isSuccessful){
+                        val checkOra = reference.orderByChild("ora").equalTo(orario)
+                        checkOra.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if (snapshot.exists()) {
+                                    inputTimeI.error = "Orario occupato"
+                                    inputTimeI.requestFocus()
+                                }else {
+                                    reference.child(orario).setValue(OrarioClass(nomeSportivo, dataPren, orario))
+                                    Toast.makeText(this@DailyCalendarActivity, "Prenotazione effettuata con successo", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                // Handle possible errors.
+                            }
+                        })
+                    } else{
+                        reference.child(dataPren).child(orario).setValue(OrarioClass(nomeSportivo, dataPren, orario))
+                        Toast.makeText(this@DailyCalendarActivity, "Prenotazione effettuata con successo", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }else{
-
             }
+        }
+        if(nome!=null){
+            val intent = Intent(this@DailyCalendarActivity, Main2Activity::class.java)
+            intent.putExtra("user3",nome)
+            intent.putExtra("attivita",attivita)
+            startActivity(intent)
+        }else{
+            val intent = Intent(this@DailyCalendarActivity, MainActivity::class.java)
+            intent.putExtra("user",nome)
+            startActivity(intent)
         }
     }
 
@@ -69,13 +111,12 @@ class DailyCalendarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_daily_calendar)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        database = FirebaseDatabase.getInstance()
+        reference = database.getReference("prenotazioni")
 
-        var dataPren = intent.getStringExtra(Intent.EXTRA_TEXT).toString()
+        nome = intent.getStringExtra("user4").toString()
+        var dataPren = intent.getStringExtra("dataPren")
 
-        //var attivita = intent.getStringExtra(Intent.EXTRA_TEXT).toString()
-        var attivita = "Filippo"
 
         dataSel = findViewById(R.id.dataSel)
         dataSel.setText(dataPren)
@@ -86,6 +127,12 @@ class DailyCalendarActivity : AppCompatActivity() {
         inputTimeF = findViewById(R.id.inputTimeF)
         timeSelect = findViewById(R.id.timeSelect)
         nomeSportivo = findViewById(R.id.nomeSportivo)
+
+        if(nome!=null){
+            nomeSportivo.setText(nome)
+        }
+        var attivita = intent.getStringExtra("attivita2")
+
 
         inputTimeI.setInputType(InputType.TYPE_NULL);
         inputTimeI.setOnClickListener{
@@ -114,56 +161,22 @@ class DailyCalendarActivity : AppCompatActivity() {
                 } }, hourF, 0, true)
             picker.show()
         }
-/*
-        var prenotaList = arrayOf("Ciccio","Franchino","Giancarlo")
-
-        database = FirebaseDatabase.getInstance()
-        reference = database.getReference("prenotazioni/$attivita")
-
-        reference.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val dataSnapshot = task.result
-                val prenotati = dataSnapshot.children.map { it.getValue(OrarioClass::class.java) }
-
-                for (pren in prenotati) {
-                    if(pren?.giorno == dataPren)
-                        prenotaList += "${pren?.ora ?: ""} ${pren?.giorno ?: ""} ${pren?.nome ?: ""}"
-                }
-            }else{
-
-            }
-        }
-
-        for (i in prenotaList.indices) {
-            listData = ListData(
-                prenotaList[i],
-            )
-            dataArrayList.add(listData)
-        }
-
-        listAdapter = ListAdapter(this@DailyCalendarActivity, dataArrayList)
-        binding.listview.adapter = listAdapter
+        listaPren(attivita!!,dataPren!!)
 
         btnConferma.setOnClickListener { view ->
             if(hourI>=hourF){
-                Toast.makeText(this@DailyCalendarActivity, "L'intervvallo di tempo è scoretto", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DailyCalendarActivity, "L'intervallo di tempo è scoretto", Toast.LENGTH_SHORT).show()
                 inputTimeI.requestFocus()
             } else if (hourF != (hourI+1)){
-                Toast.makeText(this@DailyCalendarActivity, "L'intervvallo di tempo deve essere di 1 ora", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DailyCalendarActivity, "L'intervallo di tempo deve essere di 1 ora", Toast.LENGTH_SHORT).show()
                 inputTimeI.requestFocus()
             }else if (nomeSportivo.text.toString() == "" ){
                 nomeSportivo.error="Inserire nome"
                 nomeSportivo.requestFocus()
             }else {
                 timeSelect.text = "L'intervallo è: [${inputTimeI.text}-${inputTimeF.text}]"
-                verificaPrenotazione(attivita,dataPren,nomeSportivo.text.toString())
+                verificaPrenotazione(attivita!!,dataPren!!,nomeSportivo.text.toString())
             }
         }
-
-*/
-
     }
-
-
 }
-

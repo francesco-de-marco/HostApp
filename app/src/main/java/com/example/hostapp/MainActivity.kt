@@ -16,26 +16,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val nameList = arrayOf("Calcio", "Basket", "Pallavolo", "Pugilato", "Tiro a segno", "Tennis")
+        val nameList = arrayOf("Calcio a 5", "Calcio a 7", "Basket", "Pallavolo", "Padel", "Golf", "Tennis", "Tiro a segno")
 
 
         for (i in nameList.indices) {
             listData = ListData(
-                nameList[i],
+                nameList[i]
             )
             dataArrayList.add(listData)
         }
-
+        var us= intent.getStringExtra("usSt")
         listAdapter = ListAdapter(this@MainActivity, dataArrayList)
         binding.listview.adapter = listAdapter
         binding.listview.isClickable = true
         binding.listview.onItemClickListener = OnItemClickListener { adapterView, view, i, l ->
             val intent = Intent(this@MainActivity, MapsActivity::class.java)
+            intent.putExtra("user2",us)
             intent.putExtra("name", nameList[i])
             startActivity(intent)
+
         }
 
     }
+
 }

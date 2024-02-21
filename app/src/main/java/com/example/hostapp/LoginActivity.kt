@@ -1,15 +1,15 @@
 package com.example.hostapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class LoginActivity : AppCompatActivity() {
 
@@ -70,12 +70,18 @@ class LoginActivity : AppCompatActivity() {
                         val passwordFromDB = snapshot.child(user).child("password").getValue(String::class.java)
                         if (passwordFromDB == userPassword) {
                             loginUser.error = null
-                            val tipo =snapshot.child(user).child("tipologia").getValue(String::class.java)
+                            val tipo =snapshot.child(user).child("tipo").getValue(String::class.java)
                             val intent:Intent
-                            if (tipo=="Sportivo")
-                                intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            else
+                            if (tipo=="Sportivo"){
+                                intent = Intent(this@LoginActivity, StasiActivity::class.java)
+                                intent.putExtra("user", snapshot.child(user).child("user").getValue(String::class.java))
+                                intent.putExtra(Intent.EXTRA_TEXT, user)
+                            }
+                            else {
                                 intent = Intent(this@LoginActivity, Main2Activity::class.java)
+                                intent.putExtra("attivita", snapshot.child(user).child("attivita").getValue(String::class.java))
+                                intent.putExtra(Intent.EXTRA_TEXT, user)
+                            }
                             startActivity(intent)
                         } else {
                             loginPassword.error = "Credenziali Invalide"

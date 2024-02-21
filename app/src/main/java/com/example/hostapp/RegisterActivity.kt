@@ -36,7 +36,7 @@ class RegisterActivity : AppCompatActivity() {
         haGiaAccount = findViewById(R.id.haGiaAccount)
         btnRegister = findViewById(R.id.btnRegister)
 
-        var tipo = intent.getStringExtra(Intent.EXTRA_TEXT).toString()
+        val tipo = "Sportivo"
 
         val accountEsistente = findViewById<TextView>(R.id.haGiaAccount)
         accountEsistente.setOnClickListener{
@@ -45,19 +45,11 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         fun registrazione(user: String,email: String, password: String, tipo: String){
-            val helperClass = HelperClass(user, email, password,tipo)
+            val helperClass = HelperClass(user, email, password, tipo)
             reference.child(user).setValue(helperClass)
             Toast.makeText(this@RegisterActivity, "Ti sei registrato con successo", Toast.LENGTH_SHORT).show()
-            val intent: Intent
-            if(tipo=="Sportivo")
-                intent = Intent(this, LoginActivity::class.java)
-            else intent = Intent(this, GestoreActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-
-        }
-
-        fun verifica(user: String,email: String, password: String) {
-
 
         }
 

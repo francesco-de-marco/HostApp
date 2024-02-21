@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+
 class ListAdapter(context: Context, dataArrayList: ArrayList<ListData?>?) :
     ArrayAdapter<ListData?>(context, R.layout.list_item, dataArrayList!!) {
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {

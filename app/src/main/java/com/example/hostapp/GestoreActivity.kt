@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -14,58 +15,110 @@ import com.google.firebase.database.ValueEventListener
 
 class GestoreActivity : AppCompatActivity() {
 
-    private lateinit var btnSalva: Button
+    private lateinit var inputEmail: EditText
+    private lateinit var inputUser: EditText
+    private lateinit var inputPassword: EditText
+    private lateinit var inputConfirmPass: EditText
     private lateinit var inputAttivita: EditText
     private lateinit var inputPhone: EditText
+    private lateinit var haGiaAccount: TextView
+    private lateinit var btnRegister: Button
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gestore)
 
-        btnSalva = findViewById(R.id.btnSalva)
+        inputEmail = findViewById(R.id.inputEmail)
+        inputUser = findViewById(R.id.inputUser)
+        inputPassword = findViewById(R.id.inputPassword)
+        inputConfirmPass = findViewById(R.id.inputConfirmPass)
         inputAttivita = findViewById(R.id.inputAttivita)
         inputPhone = findViewById(R.id.inputPhone)
+        haGiaAccount = findViewById(R.id.haGiaAccount)
+        btnRegister = findViewById(R.id.btnRegister)
 
+        val tipo = "Gestore"
+
+        val accountEsistente = findViewById<TextView>(R.id.haGiaAccount)
+        accountEsistente.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        fun registrazione(user: String,email: String, password: String, attivita: String, phone: String, tipo: String){
+            val helperClass = HelperClass2(user, email, password, attivita, phone, tipo)
+            reference.child(user).setValue(helperClass)
+            Toast.makeText(this@GestoreActivity, "Ti sei registrato con successo", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         fun approvato(){
-            val regTel = Regex("^[0-9]{10}\$")
+            val regUser = Regex("^[a-zA-Z0-9_]{3,}")
+            val regEmail = Regex("^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*")
+            val regPass = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-zA-Z0-9!@#\$%^&*]{7,}\$")
+            val regTel = Regex("^(\\d{10})\$")
 
             database = FirebaseDatabase.getInstance()
-            reference = database.getReference("location")
+            reference = database.getReference("users")
+            val user = inputUser.text.toString()
+            val email = inputEmail.text.toString()
+            val password = inputPassword.text.toString()
+            var conferma= inputConfirmPass.text.toString()
             val attivita = inputAttivita.text.toString()
             val phone = inputPhone.text.toString()
 
-            if(attivita=="") {
+            if (user=="") {
+                inputUser.error = "Devi compilare tutti i campi"
+                inputUser.requestFocus()
+            }else if (email=="") {
+                inputEmail.error = "Devi compilare tutti i campi"
+                inputEmail.requestFocus()
+            }
+            else if (password=="") {
+                inputPassword.error = "Devi compilare tutti i campi"
+                inputPassword.requestFocus()
+            }else if(attivita=="") {
                 inputAttivita.error = "Devi compilare tutti i campi"
                 inputAttivita.requestFocus()
             }else if (phone=="") {
                 inputPhone.error = "Devi compilare tutti i campi"
                 inputPhone.requestFocus()
+            }else if(!regUser.matches(user)){
+                inputUser.error = "User di almeno 3 lettere"
+                inputUser.requestFocus()
+            }else if(!regEmail.matches(email)){
+                inputEmail.error = "Email non valida"
+                inputEmail.requestFocus()
+            }else if(regPass.matches(password)){
+                inputPassword.error = "Password poco efficiente"
+                inputPassword.requestFocus()
             }else if(!regTel.matches(phone)){
-                inputPhone.error = "Numero di telefono invalido"
+                inputPhone.error = "Numero invalido"
                 inputPhone.requestFocus()
-            } else {
-                val helperClass2 = HelperClass2(attivita,phone)
-                reference.child(attivita).setValue(helperClass2)
-                Toast.makeText(this@GestoreActivity, "Buon Lavoro", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-            }
+            } else if (!conferma.equals(password)){
+                inputConfirmPass.setText("")
+                inputConfirmPass.error = "Password Non Coincide"
+                inputConfirmPass.requestFocus()
+            }else registrazione(user,email,password,attivita,phone,tipo)
         }
 
-        btnSalva.setOnClickListener { view ->
-            val attivita = inputAttivita.text.toString().trim()
 
-            val reference = FirebaseDatabase.getInstance().getReference("location")
+        btnRegister.setOnClickListener { view ->
+            val user = inputUser.text.toString().trim()
 
-            val checkUserDatabase = reference.orderByChild("attività").equalTo(attivita)
+            val reference = FirebaseDatabase.getInstance().getReference("users")
+
+            val checkUserDatabase = reference.orderByChild("user").equalTo(user)
 
             checkUserDatabase.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
-                        inputAttivita.error="Attività già esistente"
-                        inputAttivita.requestFocus()
+                        inputUser.error="User già esistente"
+                        inputUser.requestFocus()
                     }else approvato()
                 }
 
@@ -74,5 +127,8 @@ class GestoreActivity : AppCompatActivity() {
                 }
             })
         }
+
     }
+
+
 }

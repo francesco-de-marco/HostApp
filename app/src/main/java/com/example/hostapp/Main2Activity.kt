@@ -17,12 +17,10 @@ class Main2Activity : AppCompatActivity() {
     private lateinit var calendario: Calendar
     private lateinit var btnPrenotati: Button
     private lateinit var dataPren: TextView
-
-
+    private lateinit var activity: String
 
     data class SelectedDate(val year: Int, val month: Int, val day: Int)
     var selectedDate: SelectedDate? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +38,15 @@ class Main2Activity : AppCompatActivity() {
             dataPren.setText(""+day+"-"+(month+1)+"-"+year)
 
         }
+        var username=intent.getStringExtra("user3")
+        
+        if(username!=null){
+            activity= intent.getStringExtra("luogo").toString()
+        }else{
+            activity= intent.getStringExtra("attivita").toString()
+        }
+
+
         btnPrenotati.setOnClickListener { view ->
             if (selectedDate == null) {
                 dataPren.requestFocus()
@@ -51,7 +58,14 @@ class Main2Activity : AppCompatActivity() {
                 Toast.makeText(this@Main2Activity, "La data selezionata è sbagliata", Toast.LENGTH_SHORT).show()
             } else {
                 val intent = Intent(this, DailyCalendarActivity::class.java)
-                intent.putExtra(Intent.EXTRA_TEXT, dataPren.text)
+                if(username==null){
+                    intent.putExtra("dataPren", dataPren.text.toString())
+                    intent.putExtra("attivita2", activity)
+                }else{
+                    intent.putExtra("dataPren", dataPren.text.toString())
+                    intent.putExtra("attivita2", activity)
+                    intent.putExtra("user4",username)
+                }
                 startActivity(intent)
             }
         }
