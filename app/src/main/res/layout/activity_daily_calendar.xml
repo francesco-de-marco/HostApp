@@ -58,10 +58,10 @@
 
     <ListView
         android:id="@+id/listPre"
-        android:layout_width="331dp"
-        android:layout_height="296dp"
+        android:layout_width="337dp"
+        android:layout_height="266dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="148dp"
         app:layout_constraintEnd_toEndOf="@+id/conferma"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/nomeSportivo"
@@ -90,5 +90,18 @@
         app:layout_constraintEnd_toEndOf="@+id/inputTimeF"
         app:layout_constraintStart_toStartOf="@+id/inputTimeF"
         app:layout_constraintTop_toBottomOf="@+id/inputTimeF" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="203dp"
+        android:layout_height="29dp"
+        android:text="Prenotazioni del giorno :"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/listPre"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nomeSportivo"
+        app:layout_constraintVertical_bias="0.59" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

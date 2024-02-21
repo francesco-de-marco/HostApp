@@ -57,6 +57,7 @@ class MapsActivity : AppCompatActivity(), LocationListener {        //restiutisc
         }
     }
 
+
     fun prenota(luogo: String){     //aprirà l'activity successiva solo se l'attività è registrata come Gestore
         database = FirebaseDatabase.getInstance()
         reference = database.getReference("users")
@@ -78,7 +79,7 @@ class MapsActivity : AppCompatActivity(), LocationListener {        //restiutisc
                     }
                 })
             } else{
-
+                Toast.makeText(this, "l'attività non è registrata ", Toast.LENGTH_SHORT).show()
             }
         }
     }
