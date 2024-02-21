@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class StasiActivity : AppCompatActivity() {
+class StasiActivity : AppCompatActivity() { //Home page dello Sportivo dove è possibile visualizzare le prenotazioni effettuate
 
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
@@ -30,7 +30,7 @@ class StasiActivity : AppCompatActivity() {
         var nomeList = mutableListOf<String>()
 
         val database = FirebaseDatabase.getInstance()
-        val reference = database.getReference("prenotazioni") // Sostituisci con il tuo riferimento
+        val reference = database.getReference("prenotazioni")
 
 
         reference.addValueEventListener(object : ValueEventListener {
@@ -44,7 +44,6 @@ class StasiActivity : AppCompatActivity() {
                             // Ottieni il valore di "nome" per la "terzaChiave"
                             val nome = terzaChiaveSnapshot.child("nome").getValue(String::class.java)
 
-                            // Se il nome è uguale a "User", aggiungi la "primaChiave" all'array
                             if (nome == us) {
                                 nomeList.add("${primaChiaveSnapshot.key!!} giorno: ${secondaChiaveSnapshot.key!!} ore: ${terzaChiaveSnapshot.key!!}")
                             }
@@ -64,7 +63,7 @@ class StasiActivity : AppCompatActivity() {
         })
         button.setOnClickListener { view ->
             val intent = Intent(this@StasiActivity, MainActivity::class.java)
-            intent.putExtra("usSt",us)
+            intent.putExtra("usSt",us)      //portiamo avanti il nome dello Sportivo in modo da autocopilare il suo nome nella prenotazione che farà
             startActivity(intent)
 
         }

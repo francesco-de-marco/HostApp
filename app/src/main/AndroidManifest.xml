@@ -20,9 +20,6 @@
             android:name=".StasiActivity"
             android:exported="false" />
         <activity
-            android:name=".CentroActivity"
-            android:exported="false" />
-        <activity
             android:name=".DailyCalendarActivity"
             android:exported="false" />
         <activity

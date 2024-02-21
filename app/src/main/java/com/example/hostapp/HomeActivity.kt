@@ -14,7 +14,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var radioSport: RadioButton
     private lateinit var radioGest: RadioButton
     private lateinit var btnAvanti: Button
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {    //differenzia i tipi di registrazione
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 

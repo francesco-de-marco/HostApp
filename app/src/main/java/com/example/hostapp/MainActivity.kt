@@ -6,7 +6,7 @@ import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hostapp.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {      //Permette allo Sportivo di scegliere lo sport del campo che vuole prenotare
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var listAdapter: ListAdapter

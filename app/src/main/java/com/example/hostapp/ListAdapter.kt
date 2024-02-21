@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
-class ListAdapter(context: Context, dataArrayList: ArrayList<ListData?>?) :
+class ListAdapter(context: Context, dataArrayList: ArrayList<ListData?>?) :     // serve per implementare un listView con le CardView e cliccabile
     ArrayAdapter<ListData?>(context, R.layout.list_item, dataArrayList!!) {
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var view = view

@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
         registerText = findViewById(R.id.registerText)
         btnLogin = findViewById(R.id.btnLogin)
 
-        val textRegister = findViewById<TextView>(R.id.registerText)
+        val textRegister = findViewById<TextView>(R.id.registerText)  //riamnda all'activity registrazione
         textRegister.setOnClickListener{
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        fun controllaUser() {
+        fun controllaUser() {           // facciamo un controllo con firebase per verificare se l'utente ha inserito un nome già esistente
             val user = loginUser.text.toString().trim()
             val userPassword = loginPassword.text.toString().trim()
 
@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
                             loginUser.error = null
                             val tipo =snapshot.child(user).child("tipo").getValue(String::class.java)
                             val intent:Intent
-                            if (tipo=="Sportivo"){
+                            if (tipo=="Sportivo"){      // verifica se Sportivo o Gestore e rimandiamo ad activity diverse
                                 intent = Intent(this@LoginActivity, StasiActivity::class.java)
                                 intent.putExtra("user", snapshot.child(user).child("user").getValue(String::class.java))
                                 intent.putExtra(Intent.EXTRA_TEXT, user)
@@ -94,14 +94,14 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Handle possible errors.
+
                 }
             })
         }
 
         btnLogin.setOnClickListener { view ->
             if (!validaUser() || !validaPassword()) {
-                // Handle invalid user or password
+
             } else {
                 controllaUser()
             }

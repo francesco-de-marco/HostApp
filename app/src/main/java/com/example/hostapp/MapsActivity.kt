@@ -32,7 +32,7 @@ import okhttp3.Request
 import org.json.JSONObject
 import java.io.IOException
 
-class MapsActivity : AppCompatActivity(), LocationListener {
+class MapsActivity : AppCompatActivity(), LocationListener {        //restiutisce la lista dei campi dello sport selezionato in precedenza vicini alla posizione attuale
 
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
@@ -57,7 +57,7 @@ class MapsActivity : AppCompatActivity(), LocationListener {
         }
     }
 
-    fun prenota(luogo: String){
+    fun prenota(luogo: String){     //aprirà l'activity successiva solo se l'attività è registrata come Gestore
         database = FirebaseDatabase.getInstance()
         reference = database.getReference("users")
         var use= intent.getStringExtra("user2")
@@ -81,11 +81,10 @@ class MapsActivity : AppCompatActivity(), LocationListener {
 
             }
         }
-        Toast.makeText(this, "Non ci rompere i coglioni, Chiamaci", Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("SuspiciousIndentation")
-    fun risultati(coordinate: String){
+    fun risultati(coordinate: String){          //utilizza una'api che restituisce sotto forma di json i risultati di ricerca di google Maps
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val sport=intent.getStringExtra("name")

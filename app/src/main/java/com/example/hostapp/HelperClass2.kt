@@ -1,6 +1,6 @@
 package com.example.hostapp
 
-class HelperClass2 {
+class HelperClass2 {    // classe di appoggio per registrare i dati del Gestore
     var user: String = ""
         private set
 

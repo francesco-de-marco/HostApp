@@ -35,7 +35,8 @@ class DailyCalendarActivity : AppCompatActivity() {
     private var hourI:Int = 0
     private var hourF:Int = 0
     private lateinit var nome: String
-    fun listaPren(attivita: String,dataPren: String){
+
+    fun listaPren(attivita: String,dataPren: String){       //stampa una listView con le prenotazioni effettuate nel giorno selezionato in precedenza
         listaPren = findViewById(R.id.listPre)
         var nomeList = mutableListOf<String>()
 
@@ -61,7 +62,7 @@ class DailyCalendarActivity : AppCompatActivity() {
             }
         })
     }
-    fun verificaPrenotazione(attivita: String,dataPren: String,nomeSportivo: String){
+    fun verificaPrenotazione(attivita: String,dataPren: String,nomeSportivo: String){       //verifica se non esistono altre prenotazioni con lo stesso giorno e ora
 
         val orario="${inputTimeI.text}-${inputTimeF.text}"
 
@@ -82,28 +83,39 @@ class DailyCalendarActivity : AppCompatActivity() {
                                 }else {
                                     reference.child(orario).setValue(OrarioClass(nomeSportivo, dataPren, orario))
                                     Toast.makeText(this@DailyCalendarActivity, "Prenotazione effettuata con successo", Toast.LENGTH_SHORT).show()
+
+                                    Toast.makeText(this@DailyCalendarActivity, "$nome", Toast.LENGTH_SHORT).show()
+
+                                    if(nome == "null"){
+                                        val intent = Intent(this@DailyCalendarActivity, Main2Activity::class.java)
+                                        intent.putExtra("attivita",attivita)
+                                        startActivity(intent)
+                                    }else{
+                                        val intent = Intent(this@DailyCalendarActivity, StasiActivity::class.java)
+                                        intent.putExtra("user",nome)
+                                        startActivity(intent)
+                                    }
                                 }
                             }
                             override fun onCancelled(databaseError: DatabaseError) {
                                 // Handle possible errors.
                             }
                         })
-                    } else{
+                    } else{     // se non esiste una prenotazione effettuata in un certo campo viene aggiunto il campo tra qualli prenotati
                         reference.child(dataPren).child(orario).setValue(OrarioClass(nomeSportivo, dataPren, orario))
                         Toast.makeText(this@DailyCalendarActivity, "Prenotazione effettuata con successo", Toast.LENGTH_SHORT).show()
+                        if(nome == "null"){
+                            val intent = Intent(this@DailyCalendarActivity, Main2Activity::class.java)
+                            intent.putExtra("attivita",attivita)
+                            startActivity(intent)
+                        }else{
+                            val intent = Intent(this@DailyCalendarActivity, StasiActivity::class.java)
+                            intent.putExtra("user",nome)
+                            startActivity(intent)
+                        }
                     }
                 }
             }
-        }
-        if(nome!=null){
-            val intent = Intent(this@DailyCalendarActivity, Main2Activity::class.java)
-            intent.putExtra("user3",nome)
-            intent.putExtra("attivita",attivita)
-            startActivity(intent)
-        }else{
-            val intent = Intent(this@DailyCalendarActivity, MainActivity::class.java)
-            intent.putExtra("user",nome)
-            startActivity(intent)
         }
     }
 
@@ -129,7 +141,7 @@ class DailyCalendarActivity : AppCompatActivity() {
         nomeSportivo = findViewById(R.id.nomeSportivo)
 
         if(nome!=null){
-            nomeSportivo.setText(nome)
+            nomeSportivo.setText(nome)      //autocompilo il nome dello Sportivo che prenota il campo
         }
         var attivita = intent.getStringExtra("attivita2")
 
@@ -163,7 +175,7 @@ class DailyCalendarActivity : AppCompatActivity() {
         }
         listaPren(attivita!!,dataPren!!)
 
-        btnConferma.setOnClickListener { view ->
+        btnConferma.setOnClickListener { view ->        //verifica che l'orario sia corretto
             if(hourI>=hourF){
                 Toast.makeText(this@DailyCalendarActivity, "L'intervallo di tempo è scoretto", Toast.LENGTH_SHORT).show()
                 inputTimeI.requestFocus()

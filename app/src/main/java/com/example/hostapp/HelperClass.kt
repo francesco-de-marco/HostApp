@@ -1,6 +1,6 @@
 package com.example.hostapp
 
-class HelperClass {
+class HelperClass {     //Classe di appoggio per registrare i dati dello Sportivo
 
     var user: String = ""
         private set

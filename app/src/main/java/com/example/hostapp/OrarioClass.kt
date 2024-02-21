@@ -1,6 +1,6 @@
 package com.example.hostapp
 
-class OrarioClass {
+class OrarioClass {     // classe di appoggio per salvare le prenotazioni su database
     var nome: String = ""
         private set
     var giorno: String = ""

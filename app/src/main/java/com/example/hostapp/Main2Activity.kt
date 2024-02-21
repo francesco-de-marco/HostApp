@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import java.util.Calendar
 
 
-class Main2Activity : AppCompatActivity() {
+class Main2Activity : AppCompatActivity() {     //mostra un calendario per selezionare la data in cui si vuole prenotare
 
     private lateinit var calendarView: CalendarView
     private lateinit var calendario: Calendar
@@ -40,12 +40,11 @@ class Main2Activity : AppCompatActivity() {
         }
         var username=intent.getStringExtra("user3")
         
-        if(username!=null){
+        if(username!=null){     //questo controllo serve per differenziare quando una prenotazione viene fatta da uno Sportivo o dal Gestore per il suo campo
             activity= intent.getStringExtra("luogo").toString()
         }else{
-            activity= intent.getStringExtra("attivita").toString()
+            activity= intent.getStringExtra("attivita").toString()      // se è null vorrà dire che la prima activity avviata dopo il Login è questa
         }
-
 
         btnPrenotati.setOnClickListener { view ->
             if (selectedDate == null) {
@@ -73,8 +72,8 @@ class Main2Activity : AppCompatActivity() {
 
     private fun dataScorretta(): Boolean {
         val yearC = calendario.get(Calendar.YEAR) //anno di oggi
-        val monthC = calendario.get(Calendar.MONTH)//
-        val dayC = calendario.get(Calendar.DAY_OF_MONTH)
+        val monthC = calendario.get(Calendar.MONTH)//mese di oggi
+        val dayC = calendario.get(Calendar.DAY_OF_MONTH)//giorno di oggi
         return  (selectedDate!!.year<yearC || selectedDate!!.year>yearC+1 ) ||
                 (selectedDate!!.year==yearC && selectedDate!!.month<monthC) ||
                 (selectedDate!!.year==yearC && selectedDate!!.month==monthC && selectedDate!!.day<dayC)
